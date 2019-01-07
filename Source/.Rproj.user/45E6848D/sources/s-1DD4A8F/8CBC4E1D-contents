@@ -1,0 +1,122 @@
+## Instalación desde CRAN
+#install.packages("dplyr")
+
+library(dplyr)
+library(readr)
+
+#lee los datos de un archivo
+GlobalTemperatures <- read_csv("climate-change-earth-surface-temperature-data/GlobalTemperatures.csv")
+#View(GlobalTemperatures)
+
+#muestra esta clase
+class(GlobalTemperatures)
+
+#muestra la cantidad de filas y columnas que tiene un data set
+dim(GlobalTemperatures)
+
+#mmuestr los nombres de las columnas del data set
+names(GlobalTemperatures)
+
+#vista previa de datos con detalles útiles
+str(GlobalTemperatures)
+
+#mejor version de str() desde dplyr
+glimpse(GlobalTemperatures)
+
+#muestra un resumen
+summary(GlobalTemperatures)
+
+#muestra la parte duperior
+head(GlobalTemperatures)
+
+#ver la parte inferior
+tail(GlobalTemperatures)
+
+#muestra un histograma
+hist(GlobalTemperatures$LandAverageTemperature)
+
+GlobalTemperatures
+
+#verifica para NAs
+is.na(GlobalTemperatures)
+
+#Existe algun(os) NAs?
+any(is.na(GlobalTemperatures))
+
+#Cuenta los NAs
+sum(is.na(GlobalTemperatures))
+
+#Gráfico
+
+par(mfrow=c(4,2))  #con esto dividimos el área en 4 partes, 2 columnas y 2 filas.
+
+plot(GlobalTemperatures$dt,GlobalTemperatures$LandAverageTemperature,type="b",main="Temperatura promedio de la tierra v/s Año", xlab="Años", ylab="Prom. temp.", col="2", pch=18)
+
+plot(GlobalTemperatures$dt,GlobalTemperatures$LandAverageTemperatureUncertainty,type="b",main="Incertidumbre de la temperatura promedio de la tierra v/s Año", xlab="Años", ylab="Prom. temp.", col="2", pch=18)
+
+plot(GlobalTemperatures$dt,GlobalTemperatures$LandMaxTemperature,type="b",main="Temperatura máxima terrestre v/s Año", xlab="Años", ylab="Prom. temp.", col="3", pch=18)
+
+plot(GlobalTemperatures$dt,GlobalTemperatures$LandMaxTemperatureUncertainty,type="b",main="Incertidumbre de temperatura máx. Terrestre v/s Año", xlab="Años", ylab="Prom. temp.", col="3", pch=18)
+
+plot(GlobalTemperatures$dt,GlobalTemperatures$LandMinTemperature,type="b",main="Temperatura mínima terrestre v/s Año", xlab="Años", ylab="Prom. temp.", col="4", pch=18)
+
+plot(GlobalTemperatures$dt,GlobalTemperatures$LandMinTemperatureUncertainty,type="b",main="Incertidumbre de temperatura mínima terrestre v/s Año", xlab="Años", ylab="Prom. temp.", col="4", pch=18)
+
+plot(GlobalTemperatures$dt,GlobalTemperatures$LandAndOceanAverageTemperature,type="b",main="Temperatura media terrestre y oceanica v/s Año", xlab="Años", ylab="Prom. temp.", col="6", pch=18)
+
+plot(GlobalTemperatures$dt,GlobalTemperatures$LandAndOceanAverageTemperatureUncertainty,type="b",main="Incertidumbre de la temperatura promedio de la tierra y el océano v/s Año", xlab="Años", ylab="Prom. temp.", col="6", pch=18)
+
+
+#filtre por fecha para saber cuantos datos se perderian del total
+dim(GlobalTemperatures)
+count(filter(GlobalTemperatures, dt < "1850-01-01"))
+
+#suma las  filas sin valores perdidos
+sum(complete.cases(GlobalTemperatures))
+
+#datos de subconjuntos, manteniendo solo casos completos
+GlobalTemperatures2<-GlobalTemperatures[complete.cases(GlobalTemperatures),]
+
+#otra forma de eliminar filas con NAs
+#na.omit(GlobalTemperatures)
+
+#Gráfico
+par(mfrow=c(4,2))  #con esto dividimos el área en 4 partes, 2 columnas y 4 filas.
+
+plot(GlobalTemperatures2$dt,GlobalTemperatures2$LandAverageTemperature,type="b",main="Temperatura promedio de la tierra v/s Año", xlab="Años", ylab="Prom. temp.", col="2", pch=18)
+
+plot(GlobalTemperatures2$dt,GlobalTemperatures2$LandAverageTemperatureUncertainty,type="b",main="Incertidumbre de la temperatura promedio de la tierra v/s Año", xlab="Años", ylab="Prom. temp.", col="2", pch=18)
+
+plot(GlobalTemperatures2$dt,GlobalTemperatures2$LandMaxTemperature,type="b",main="Temperatura máxima terrestre v/s Año", xlab="Años", ylab="Prom. temp.", col="3", pch=18)
+
+plot(GlobalTemperatures2$dt,GlobalTemperatures2$LandMaxTemperatureUncertainty,type="b",main="Incertidumbre de temperatura máx. Terrestre v/s Año", xlab="Años", ylab="Prom. temp.", col="3", pch=18)
+
+plot(GlobalTemperatures2$dt,GlobalTemperatures2$LandMinTemperature,type="b",main="Temperatura mínima terrestre v/s Año", xlab="Años", ylab="Prom. temp.", col="4", pch=18)
+
+plot(GlobalTemperatures2$dt,GlobalTemperatures2$LandMinTemperatureUncertainty,type="b",main="Incertidumbre de temperatura mínima terrestre v/s Año", xlab="Años", ylab="Prom. temp.", col="4", pch=18)
+
+plot(GlobalTemperatures2$dt,GlobalTemperatures2$LandAndOceanAverageTemperature,type="b",main="Temperatura media terrestre y oceanica v/s Año", xlab="Años", ylab="Prom. temp.", col="6", pch=18)
+
+plot(GlobalTemperatures2$dt,GlobalTemperatures2$LandAndOceanAverageTemperatureUncertainty,type="b",main="Incertidumbre de la temperatura promedio de la tierra y el océano v/s Año", xlab="Años", ylab="Prom. temp.", col="6", pch=18)
+
+
+
+
+# library(readr)
+# GlobalLandTemperaturesByState <- read_csv("climate-change-earth-surface-temperature-data/GlobalLandTemperaturesByState.csv")
+# View(GlobalLandTemperaturesByState)
+#
+# library(readr)
+# GlobalLandTemperaturesByMajorCity <- read_csv("climate-change-earth-surface-temperature-data/GlobalLandTemperaturesByMajorCity.csv")
+# View(GlobalLandTemperaturesByMajorCity)
+#
+# library(readr)
+# GlobalLandTemperaturesByCountry <- read_csv("climate-change-earth-surface-temperature-data/GlobalLandTemperaturesByCountry.csv")
+# View(GlobalLandTemperaturesByCountry)
+#
+# library(readr)
+# GlobalLandTemperaturesByCity <- read_csv("climate-change-earth-surface-temperature-data/GlobalLandTemperaturesByCity.csv")
+# View(GlobalLandTemperaturesByCity)
+
+#barplot(table(GlobalLandTemperaturesByCity$AverageTemperature))
+

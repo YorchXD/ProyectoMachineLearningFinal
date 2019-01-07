@@ -1,0 +1,112 @@
+#Importando librerias
+library(dplyr)
+library(gsheet)
+library("Hmisc")
+library("corrplot")
+library("ggpubr")
+library("ggplot")
+
+# 1.1 Lectura de los datos
+web <-"https://docs.google.com/spreadsheets/d/1GUEcKbZ-F_Ef0yenZUEtH3z5QhF-YBDvFDer7JJxPow/"
+datos<-read.csv(text=gsheet2text(web, format='csv'), header = TRUE, dec = ".", sep = ",")
+datos
+
+#Verificando los tipos de datos
+#class(datos[,1])
+#typeof(datos)
+#str(datos)
+
+# 1.2 Eliminación de los parametros ya que se cambiaran por otros
+datos<-datos[,-1]
+datos
+
+# 1.3 Trasponiendo la matriz
+datos_trans <- t(datos)
+datos_trans <- as.data.frame(datos_trans) 
+datos_trans
+#str(datos_trans)
+
+#Verificando los tipos de datos
+#class(datos_trans[,1])
+#typeof(datos_trans[1,1])
+#datos_trans[1,1]
+
+#datos_trans
+
+# 2. Asignando los nombres a las columnas
+colnames(datos_trans) <- c("PPT", "Tmin", "Tmax", "Wind", "RH", "moisture_content", "crude protein", "measuring heating value", "ashes", "crude fiber", "fats", "pH", "molds and yeasts", "total phenolic")
+datos_trans
+
+#Probando que funcione los datos de la matriz calculando el promedio de alguna columna.
+#mean(datos_trans[,"PPT"])
+#datos_trans
+
+#View(datos_trans)
+#summary(datos_trans)
+
+# 3. Matriz de correlacion con p.value
+cor_2 <- rcorr(as.matrix(datos_trans))
+cor_2
+
+# 4. Gráficos de colores
+
+#M<-cor(datos_trans)
+#corrplot(M, method = "pie")
+
+# 4.1 Obteniendo la matriz de correlación con sus respectivos p-values
+cor_5 <- rcorr(as.matrix(datos_trans))
+
+# 4.2 Extrayendo la matriz de correlación
+M <- cor_5$r
+
+# 4.3 Extrayendo la matriz de p-values
+p_mat <- cor_5$P
+
+# 4.4 Realizando la paleta de colores que se utilizará en la matriz gráfica
+col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
+
+# 4.5 Marcando los coeficientes insignificantes de acuerdo con el nivel de significancia del valor p especificado
+corrplot(M, method = "color", col = col(200),  
+         type = "full", order = "hclust", 
+         addCoef.col = "black", # Add coefficient of correlation
+         tl.col = "darkblue", tl.srt = 45, #Text label color and rotation
+         # Combine with significance level
+         p.mat = p_mat, sig.level = 0.01,  
+         # hide correlation coefficient on the principal diagonal
+         diag = FALSE 
+)
+
+# 4.6 Mostrando la matriz triangular superior para visualizar mejor los datos
+corrplot(M, method = "color", col = col(200),  
+         type = "upper", order = "hclust", 
+         addCoef.col = "black", # Add coefficient of correlation
+         tl.col = "darkblue", tl.srt = 45, #Text label color and rotation
+         # Combine with significance level
+         p.mat = p_mat, sig.level = 0.01,  
+         # hide correlation coefficient on the principal diagonal
+         diag = FALSE 
+)
+
+# 4.7 Mostrando la matriz triangular inferior para visualizar mejor los datos
+corrplot(M, method = "color", col = col(200),  
+         type = "lower", order = "hclust", 
+         addCoef.col = "black", # Add coefficient of correlation
+         tl.col = "darkblue", tl.srt = 45, #Text label color and rotation
+         # Combine with significance level
+         p.mat = p_mat, sig.level = 0.01,  
+         # hide correlation coefficient on the principal diagonal
+         diag = FALSE 
+)
+
+#NOTA: Al analizar las distintas técnicas visuales y de colores, se puede observar que el coeficiente con mayor p-value se encuetra en la matriz inferior y está relacionado con el "Tmax" y "fats"
+
+# 5. Gráfico de dispersión
+ggscatter(datos_trans, x = "fats", y = "Tmax",add = "reg.line", conf.int = TRUE, cor.coef = TRUE, cor.coeff.args = list(method = "pearson", label.x = 10, label.sep = "\n"))
+
+# 6. Conclusión
+
+#Al utilizar el metodo de pearson y aplicando algunas tecnicas de visualización y colores, se puede apreciar que hay asociación  entre las variables "fats" y "Tmax" con un nivel de 
+#confianza de 98%.
+
+#Ahora, realizando un gráfico de dispersión entre las variables "Tmax" y "fats", se puede apreciar que existe una fuerte asociación negativa, esto quiere decir que a mayor temperatura, 
+#menor porcentaje de grasas y viceverza.

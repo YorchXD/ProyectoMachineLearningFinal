@@ -1,0 +1,6 @@
+library(pca3d)
+data(metabo)
+pca <-prcomp(metabo[,-1],scale.=TRUE)
+gr  <-factor(metabo[,1])
+summary(gr)
+View(metabo)

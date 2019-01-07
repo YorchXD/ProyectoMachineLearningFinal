@@ -1,0 +1,120 @@
+
+#EXTRAS
+#datos de subconjuntos, manteniendo solo casos completos
+#datosWeb[complete.cases(datosWeb),]
+#complete.cases(datosWeb)
+#encuentra filas sin valores perdidos
+#complete.cases(datosWeb1)
+#datos de subconjuntos, manteniendo solo casos completos
+#datosWeb2 <- datosWeb1[complete.cases(datosWeb1),]
+#plot(promHoras,type="l",main="Hora (1-24) v/s Contaminacion promedio", xlab="Horas", ylab="Prom temp")
+#plot(promHoras,type="h", main="Hora (1-24) v/s Contaminacion promedio", xlab="Horas", ylab="Prom temp", axes=F)
+
+
+#ETAPA 1
+Web <- "https://sinca.mma.gob.cl/cgi-bin/APUB-MMA/apub.tsindico2.cgi?outtype=xcl&macro=./RVII/709/Cal/PM25//PM25.horario.horario.ic&from=120707&to=180418&path=/usr/airviro/data/CONAMA/&lang=esp&rsrc=&macropath="
+datosWeb <- read.csv2(Web, header=TRUE, sep=";", dec = ",")  # o puede escribirse la dirección directamente dentro
+
+#ETAPA 2
+dim(datosWeb) #muestra el numero de filas y columnas
+
+#ETAPA 3
+str(datosWeb) #muestra los nombres de las columnas del data set
+#OBSERVACION: se muestra prom columna extra denominada x y se debe a que el dataset al final de cada fila tiene un ";" y eso hace referencia a que se creara otra columna pero R asigna un nombre random a esta, en este caso como solo fue prom le asigna la letra "x"
+
+#ETAPA 4
+head(datosWeb)  # un vistazo para ver cómo son los datos
+
+#ETAPA 5
+#sample(datosWeb, 10, replace = TRUE) #muestra 10 veces todo el dataset
+#nrow(datosWeb) #Muestra el total de filas que existe en el dataset
+sample(1:nrow(datosWeb),size=10,replace=FALSE) #muestra numeros aleatoreos del total de filas que existe en el dataset
+datosWeb[sample(1:nrow(datosWeb),size=10,replace=FALSE),] #muestra los datos de las filas aleatoreas escogidas por la funcion simple
+
+#ETAPA 6
+datosWeb1 <- datosWeb[ ,-c(ncol(datosWeb))] #Elimina la ultima columna que se creo por defecto. Ver Observacion mencionada anteriormete para la explicacion.
+#dim(datosWeb1)
+#View(datosWeb1)
+
+#is.na(datosWeb1) #verifica para NAs
+#any(is.na(datosWeb1)) #Existe algun(os) NAs?
+#sum(is.na(datosWeb1)) #Cuenta los NAs
+#View(datosWeb1)
+
+names(datosWeb1) #Muetra los nombres de las columnas que tiene en el encabezado el dataset
+colum.a.eliminar <- c("Registros.preliminares", "Registros.no.validados") #Se realiza un listado de las columnas que se desean eliminar
+datosWeb2 <- datosWeb1[, ! names(datosWeb1) %in% colum.a.eliminar, drop = F] #Crea un nuevo data set pero sin las columnas mencionadas en la lista anterior
+#View(datosWeb2)
+
+#ETAPA 7
+#columna.set.fecha<-as.Date(as.character(datosWeb2[,1]), format = "%y%m%d") #a toda la columna fecha que se encontraba de tipo int se le dio formato
+datosWeb2$FECHA..YYMMDD.<-as.Date(as.character(datosWeb2[,1]), format = "%y%m%d")
+View(datosWeb2)
+
+prom0<-datosWeb2[datosWeb2$HORA..HHMM.==0, 3, drop = FALSE]
+prom1<-datosWeb2[datosWeb2$HORA..HHMM.==100, 3, drop = FALSE]
+prom2<-datosWeb2[datosWeb2$HORA..HHMM.==200, 3, drop = FALSE]
+prom3<-datosWeb2[datosWeb2$HORA..HHMM.==300, 3, drop = FALSE]
+prom4<-datosWeb2[datosWeb2$HORA..HHMM.==400, 3, drop = FALSE]
+prom5<-datosWeb2[datosWeb2$HORA..HHMM.==500, 3, drop = FALSE]
+prom6<-datosWeb2[datosWeb2$HORA..HHMM.==600, 3, drop = FALSE]
+prom7<-datosWeb2[datosWeb2$HORA..HHMM.==700, 3, drop = FALSE]
+prom8<-datosWeb2[datosWeb2$HORA..HHMM.==800, 3, drop = FALSE]
+prom9<-datosWeb2[datosWeb2$HORA..HHMM.==900, 3, drop = FALSE]
+prom10<-datosWeb2[datosWeb2$HORA..HHMM.==1000, 3, drop = FALSE]
+prom11<-datosWeb2[datosWeb2$HORA..HHMM.==1100, 3, drop = FALSE]
+prom12<-datosWeb2[datosWeb2$HORA..HHMM.==1200, 3, drop = FALSE]
+prom13<-datosWeb2[datosWeb2$HORA..HHMM.==1300, 3, drop = FALSE]
+prom14<-datosWeb2[datosWeb2$HORA..HHMM.==1400, 3, drop = FALSE]
+prom15<-datosWeb2[datosWeb2$HORA..HHMM.==1500, 3, drop = FALSE]
+prom16<-datosWeb2[datosWeb2$HORA..HHMM.==1600, 3, drop = FALSE]
+prom17<-datosWeb2[datosWeb2$HORA..HHMM.==1700, 3, drop = FALSE]
+prom18<-datosWeb2[datosWeb2$HORA..HHMM.==1800, 3, drop = FALSE]
+prom19<-datosWeb2[datosWeb2$HORA..HHMM.==1900, 3, drop = FALSE]
+prom20<-datosWeb2[datosWeb2$HORA..HHMM.==2000, 3, drop = FALSE]
+prom21<-datosWeb2[datosWeb2$HORA..HHMM.==2100, 3, drop = FALSE]
+prom22<-datosWeb2[datosWeb2$HORA..HHMM.==2200, 3, drop = FALSE]
+prom23<-datosWeb2[datosWeb2$HORA..HHMM.==2300, 3, drop = FALSE]
+
+p0<-colMeans(prom0, na.rm = TRUE)
+p1<-colMeans(prom1, na.rm = TRUE)
+p2<-colMeans(prom2, na.rm = TRUE)
+p3<-colMeans(prom3, na.rm = TRUE)
+p4<-colMeans(prom4, na.rm = TRUE)
+p5<-colMeans(prom5, na.rm = TRUE)
+p6<-colMeans(prom6, na.rm = TRUE)
+p7<-colMeans(prom7, na.rm = TRUE)
+p8<-colMeans(prom8, na.rm = TRUE)
+p9<-colMeans(prom9, na.rm = TRUE)
+p10<-colMeans(prom10, na.rm = TRUE)
+p11<-colMeans(prom11, na.rm = TRUE)
+p12<-colMeans(prom12, na.rm = TRUE)
+p13<-colMeans(prom13, na.rm = TRUE)
+p14<-colMeans(prom14, na.rm = TRUE)
+p15<-colMeans(prom15, na.rm = TRUE)
+p16<-colMeans(prom16, na.rm = TRUE)
+p17<-colMeans(prom17, na.rm = TRUE)
+p18<-colMeans(prom18, na.rm = TRUE)
+p19<-colMeans(prom19, na.rm = TRUE)
+p20<-colMeans(prom20, na.rm = TRUE)
+p21<-colMeans(prom21, na.rm = TRUE)
+p22<-colMeans(prom22, na.rm = TRUE)
+p23<-colMeans(prom23, na.rm = TRUE)
+
+promHoras<-c(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17,p18,p19,p20,p21,p22,p23,p0)
+#View(promHoras)
+
+#Gráfico
+plot(promHoras,type="b",main="Hora (1-24) v/s Contaminacion promedio", xlab="Horas", ylab="Prom. temp.", col="2", pch=18)
+
+#ETAPA 8
+summary(promHoras)
+hist(promHoras,breaks = 50 ,freq = F, main = "Histograma", xlim = c(15,55),ylim = c(0,0.2), col = "51")
+
+#ETAPA 9
+dim(datosWeb2)
+
+#EATAPA 10
+#eliminar filas con NAs
+na.omit(datosWeb2)
+
